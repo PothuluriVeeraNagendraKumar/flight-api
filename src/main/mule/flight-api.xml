@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="api_Listener_config" doc:name="HTTP Listener config" doc:id="1a9f2858-7ba5-4a81-ae96-4ce5a1774517" >
+		<http:listener-connection host="0.0.0.0" port="8082" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="dc711cd0-7fd0-467b-a702-24fc70c1bd89" >
+		<http:request-connection host="training4-american-ws.cloudhub.io" port="80" />
+	</http:request-config>
+	<http:listener-config name="ap_Listener_config1" doc:name="HTTP Listener config" doc:id="1a5e35e4-7107-4a47-87e0-049fd5595fa2" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration1" doc:name="HTTP Request configuration" doc:id="7f4f953b-c18a-4ac1-b13e-3935ea5f2194" >
+		<http:request-connection host="training4-american-ws.cloudhub.io" port="80" />
+	</http:request-config>
+	<flow name="flight-apiFlow" doc:id="135f55bd-7a8a-452d-a9b0-8065ebe29a9f" >
+		<http:listener doc:name="Listener" doc:id="14458036-82bf-40ee-b8b1-b3c9efbf5879" config-ref="api_Listener_config" path="/sample"/>
+		<logger level="INFO" doc:name="Logger" doc:id="d7289d04-8905-4fac-9e7c-b15a0eb1308f" message="flow started"/>
+		<http:request method="DELETE" doc:name="Request" doc:id="a461d9be-ccc7-427e-a0f3-fe9a36e87dee" path="/api/flights" config-ref="HTTP_Request_configuration">
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"" : "",
+	origin : attributes.queryParams.origin,
+	destination : attributes.queryParams.destination
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="Logger" doc:id="ffdd39c8-56eb-4164-aff0-cd8ba87ff892" />
+	</flow>
+</mule>
